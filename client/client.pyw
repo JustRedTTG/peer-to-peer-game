@@ -8,14 +8,13 @@ from typing import Tuple
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.getcwd(), '..'))
 
-
 from common.security_wrapper import SecurityWrapper
-
 
 SERVER_HOST = os.environ.get('SERVER_HOST', '127.0.0.1')
 SERVER_PORT = int(os.environ.get('SERVER_PORT', '9024'))
 
 print(f'Server is: {SERVER_HOST}:{SERVER_PORT}')
+
 
 class Client(SecurityWrapper):
     address: Tuple[str, int] = None
@@ -46,4 +45,3 @@ if __name__ == '__main__':
     threading.Thread(target=client.receive, daemon=False).start()
     print("Please note that this script isn't meant to be executed directly. Running a server echo now...")
     client.start()
-
