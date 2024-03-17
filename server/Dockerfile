@@ -10,4 +10,4 @@ COPY . /app
 
 EXPOSE 9024
 
-CMD ["python", "server/server.py"]
+CMD ["python", "server.py"]
