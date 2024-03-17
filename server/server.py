@@ -1,15 +1,12 @@
 import os
-import ssl
-from OpenSSL import SSL
-from socket import socket, AF_INET, SOCK_DGRAM
-from security_wrapper import SecurityWrapper
+from common.security_wrapper import SecurityWrapper
 
 
 class Server(SecurityWrapper):
     def __init__(self):
         self.clients = {}
 
-        super().__init__(os.environ.get('SERVER_HOST', ''), int(os.environ.get('SERVER_PORT', '9024')))
+        super().__init__(os.environ.get('SERVER_HOST', 'localhost'), int(os.environ.get('SERVER_PORT', '9024')))
         print(f'Server: {self.host}:{self.port}')
 
     def _receive(self, data, addr):

@@ -6,8 +6,9 @@ COPY requirements.txt /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+COPY server /app/server
+COPY common /app/common
 
 EXPOSE 9024
 
-CMD ["python", "server.py"]
+CMD ["python", "server/server.py"]
