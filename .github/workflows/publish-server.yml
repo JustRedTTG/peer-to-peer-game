@@ -37,4 +37,4 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: p2p-game:latest
+          tags: peer-to-peer-game:latest
