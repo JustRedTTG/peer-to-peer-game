@@ -10,6 +10,7 @@ class Server(SecurityWrapper):
         self.clients = {}
 
         super().__init__(os.environ.get('SERVER_HOST', ''), int(os.environ.get('SERVER_PORT', '9024')))
+        print(f'Server: {self.host}:{self.port}')
 
     def _receive(self, data, addr):
         if data == b'echo':
