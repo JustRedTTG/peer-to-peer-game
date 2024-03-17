@@ -1,4 +1,10 @@
 import os
+import sys
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(os.getcwd(), '..'))
+
+
 from common.security_wrapper import SecurityWrapper
 
 
