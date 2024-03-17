@@ -37,3 +37,9 @@ My schedule is quite full so I don't know how much I'll put into sharing on deta
 but I'll definitely keep you updated on any major changes! 
 - You can follow development on the [Discord](https://discord.gg/S9nVwKjyWk)
 - I might post on my [Youtube channel](https://youtube.com/@RedstoneHair) too, don't miss out!
+
+# Run your own instance
+The game is open-source, including the server
+any paid content will be passed through our server/mods
+
+[![Server container image](https://github.com/JustRedTTG/peer-to-peer-game/actions/workflows/publish-server.yml/badge.svg)](https://github.com/JustRedTTG/peer-to-peer-game/actions/workflows/publish-server.yml)
