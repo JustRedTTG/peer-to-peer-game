@@ -12,8 +12,8 @@ class Server(SecurityWrapper):
         super().__init__(os.environ.get('SERVER_HOST', ''), int(os.environ.get('SERVER_PORT', '9024')))
 
     def _receive(self, data, addr):
-        print(f"Received tag from {addr}: {data.decode()}")
-        self.send(b'Hello from server!', addr)
+        if data == b'echo':
+            self.send(b'Hello from server!', addr)
 
 
 if __name__ == '__main__':

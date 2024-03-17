@@ -26,15 +26,18 @@ class Client(SecurityWrapper):
         print(f'Client: {self.host}:{self.port}')
 
     def start(self):
-        self.socket.connect((SERVER_HOST, SERVER_PORT))
-        self.send(b'ready', (SERVER_HOST, SERVER_PORT))
+        self.send(b'echo', (SERVER_HOST, SERVER_PORT))
 
     def _receive(self, data: bytes, addr: Tuple[str, int]):
-        print(f"Received tag from {addr}: {data.decode()}")
-        self.send(b'Hello from client!', addr)
+        if data == b'Hello from server!':
+            self.send(b'Hello from client!', addr)
+            print("Received echo from server")
+            self.receiving = False
 
 
 if __name__ == '__main__':
     client = Client()
     threading.Thread(target=client.receive, daemon=False).start()
+    print("Please note that this script isn't meant to be executed directly. Running a server echo now...")
     client.start()
+

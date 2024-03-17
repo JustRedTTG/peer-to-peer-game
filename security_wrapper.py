@@ -17,6 +17,7 @@ class SecurityWrapper:
 
         self.addressbook = {}
         self.connected_clients = []
+        self.receiving = False
 
     def encrypt(self, data: bytes, addr) -> bytes:
         return base64.b64encode(self.addressbook[addr].encrypt(
@@ -42,7 +43,8 @@ class SecurityWrapper:
         print(f"Received tag from {addr}: {data.decode()}")
 
     def receive(self):
-        while True:
+        self.receiving = True
+        while self.receiving:
             data, addr = self.socket.recvfrom(1024)
             if addr not in self.addressbook:
                 self.addressbook[addr] = serialization.load_pem_public_key(data)
