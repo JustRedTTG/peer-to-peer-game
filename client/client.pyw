@@ -1,13 +1,17 @@
+import os
 import random
+import threading
 import time
 import uuid
+from socket import socket, AF_INET, SOCK_DGRAM
 from typing import Any, Tuple
+from security_wrapper import SecurityWrapper
 
-from twisted.internet.protocol import DatagramProtocol
-from twisted.internet import reactor
+SERVER_HOST = os.environ.get('SERVER_HOST', '127.0.0.1')
+SERVER_PORT = int(os.environ.get('SERVER_PORT', 9024))
 
 
-class Client(DatagramProtocol):
+class Client(SecurityWrapper):
     address: Tuple[str, int] = None
     TIMEOUT_TIME = 5
     HEARTBEAT_TIME = 1.5
@@ -18,39 +22,19 @@ class Client(DatagramProtocol):
 
     def __init__(self, host: str = None, port: int = None):
         self.identifier = uuid.uuid4()
-        self.host = '127.0.0.1' if host is None or host == 'localhost' else host
-        self.port = port or self.get_port()
-        self.connected = False
-        self.heartbeat_last_seen = 0
+        super().__init__(host or 'localhost', port or self.get_port())
         print(f'Client: {self.host}:{self.port}')
 
-    def connect(self, host, port):
-        self.address = (host, port)
-        self.connected = True
-        self.heartbeat_last_seen = time.time()
-        reactor.callInThread(self.heartbeat)
+    def start(self):
+        self.socket.connect((SERVER_HOST, SERVER_PORT))
+        self.send(b'ready', (SERVER_HOST, SERVER_PORT))
 
-    def startProtocol(self):
-        self.connect(input('Host: ') or '127.0.0.1', int(input('Port: ')))
-
-
-    def datagramReceived(self, datagram: bytes, addr: Any) -> None:
-        if datagram == b'heartbeat':
-            self.heartbeat_last_seen = time.time()
-        print(addr, datagram.decode())
-
-    def heartbeat(self):
-        while self.connected:
-            self.transport.write(b'heartbeat', self.address)
-            time.sleep(self.HEARTBEAT_TIME)
-            self.connected = time.time() - self.heartbeat_last_seen < self.TIMEOUT_TIME
-        print('Disconnected')
-
-    def listen(self):
-        reactor.listenUDP(self.port, self)
+    def _receive(self, data: bytes, addr: Tuple[str, int]):
+        print(f"Received tag from {addr}: {data.decode()}")
+        self.send(b'Hello from client!', addr)
 
 
 if __name__ == '__main__':
     client = Client()
-    client.listen()
-    reactor.run()
+    threading.Thread(target=client.receive, daemon=False).start()
+    client.start()
