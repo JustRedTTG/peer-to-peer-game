@@ -7,7 +7,7 @@ from hexicapi.encryption import *
 
 class SecurityWrapper:
     def __init__(self, host: str, port: int):
-        self.host = '127.0.0.1' if host is None or host == 'localhost' else host
+        self.host = '0.0.0.0' if host is None else '127.0.0.1' if host == 'localhost' else host
         self.port = port
 
         self.socket = socket(AF_INET, SOCK_DGRAM)

@@ -27,7 +27,7 @@ class Client(SecurityWrapper):
 
     def __init__(self, host: str = None, port: int = None):
         self.identifier = uuid.uuid4()
-        super().__init__(host or 'localhost', port or self.get_port())
+        super().__init__(host, port or self.get_port())
         print(f'Client: {self.host}:{self.port}')
 
     def start(self):
