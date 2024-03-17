@@ -13,8 +13,9 @@ from common.security_wrapper import SecurityWrapper
 
 
 SERVER_HOST = os.environ.get('SERVER_HOST', '127.0.0.1')
-SERVER_PORT = int(os.environ.get('SERVER_PORT', 9024))
+SERVER_PORT = int(os.environ.get('SERVER_PORT', '9024'))
 
+print(f'Server is: {SERVER_HOST}:{SERVER_PORT}')
 
 class Client(SecurityWrapper):
     address: Tuple[str, int] = None
