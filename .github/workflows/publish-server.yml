@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'requirements.txt'
+      - 'server/server.py'
+      - 'Dockerfile-server'
+      - 'common/*'
 
 env:
   REGISTRY: ghcr.io
