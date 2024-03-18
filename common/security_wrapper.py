@@ -1,6 +1,7 @@
 import base64
 import threading
 import time
+from logging import debug
 from socket import socket, AF_INET, SOCK_DGRAM
 from hexicapi.encryption import *
 
@@ -46,8 +47,7 @@ class SecurityWrapper:
         self.receiving = True
         while self.receiving:
             data, addr = self.socket.recvfrom(1024)
-            print(f"Received data from {addr}: {data.decode()}")
-            if addr not in self.addressbook:
+            if addr not in self.addressbook or b'BEGIN PUBLIC KEY' in data:
                 self.addressbook[addr] = serialization.load_pem_public_key(data)
                 if addr not in self.connected_clients:
                     self.socket.sendto(self.public_key, addr)
@@ -64,6 +64,6 @@ class SecurityWrapper:
         else:
             self.socket.sendto(self.public_key, addr)
             self.connected_clients.append(addr)
-            thread = threading.Thread(target=self.send, args=(data, addr, .1), daemon=True)
+            thread = threading.Thread(target=self.send, args=(data, addr, .5), daemon=True)
             thread.start()
             thread.join()
