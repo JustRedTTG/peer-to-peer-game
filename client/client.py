@@ -25,7 +25,7 @@ class Client(SecurityWrapper):
     def get_port():
         return random.randint(10000, 40000)
 
-    def __init__(self, host: str = None, port: int = None):
+    def __init__(self, host: str = 'localhost', port: int = None):
         self.identifier = uuid.uuid4()
         super().__init__(host, port or self.get_port())
         print(f'Client: {self.host}:{self.port}')
