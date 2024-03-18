@@ -46,6 +46,7 @@ class SecurityWrapper:
         self.receiving = True
         while self.receiving:
             data, addr = self.socket.recvfrom(1024)
+            print(f"Received data from {addr}: {data.decode()}")
             if addr not in self.addressbook:
                 self.addressbook[addr] = serialization.load_pem_public_key(data)
                 if addr not in self.connected_clients:
