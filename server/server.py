@@ -12,7 +12,7 @@ class Server(SecurityWrapper):
     def __init__(self):
         self.clients = {}
 
-        super().__init__('localhost', 9024)
+        super().__init__('0.0.0.0', 9024)
         print(f'Server: {self.host}:{self.port}')
 
     def _receive(self, data, addr):
