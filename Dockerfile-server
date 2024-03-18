@@ -9,6 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY server /app/server
 COPY common /app/common
 
-EXPOSE 9024
+EXPOSE 9024/udp
 
 CMD ["python", "/app/server/server.py"]
