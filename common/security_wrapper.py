@@ -7,7 +7,7 @@ from hexicapi.encryption import *
 
 class SecurityWrapper:
     def __init__(self, host: str, port: int):
-        self.host = '0.0.0.0' if host is None else '127.0.0.1' if host == 'localhost' else host
+        self.host = '0.0.0.0' if host is None else '0.0.0.0' if host == 'localhost' else host
         self.port = port
 
         self.socket = socket(AF_INET, SOCK_DGRAM)
@@ -63,4 +63,6 @@ class SecurityWrapper:
         else:
             self.socket.sendto(self.public_key, addr)
             self.connected_clients.append(addr)
-            threading.Thread(target=self.send, args=(data, addr, .1), daemon=False).start()
+            thread = threading.Thread(target=self.send, args=(data, addr, .1), daemon=True)
+            thread.start()
+            thread.join()
