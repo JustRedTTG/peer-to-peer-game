@@ -41,7 +41,7 @@ class Client(SecurityWrapper):
             self.receiving = False
 
     def thread_receive(self):
-        threading.Thread(target=client.receive, daemon=False).start()
+        threading.Thread(target=self.receive, daemon=False).start()
 
 
 if __name__ == '__main__':
