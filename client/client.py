@@ -20,6 +20,7 @@ class Client(SecurityWrapper):
     address: Tuple[str, int] = None
     TIMEOUT_TIME = 5
     HEARTBEAT_TIME = 1.5
+    SERVER = (SERVER_HOST, SERVER_PORT)
 
     @staticmethod
     def get_port():
@@ -30,8 +31,8 @@ class Client(SecurityWrapper):
         super().__init__(host, port or self.get_port())
         print(f'Client: {self.host}:{self.port}')
 
-    def start(self):
-        self.send(b'echo', (SERVER_HOST, SERVER_PORT))
+    def echo(self):
+        self.send(b'echo', self.SERVER)
 
     def _receive(self, data: bytes, addr: Tuple[str, int]):
         if data == b'Hello from server!':
@@ -39,9 +40,12 @@ class Client(SecurityWrapper):
             print("Received echo from server")
             self.receiving = False
 
+    def thread_receive(self):
+        threading.Thread(target=client.receive, daemon=False).start()
+
 
 if __name__ == '__main__':
     client = Client()
-    threading.Thread(target=client.receive, daemon=False).start()
+    client.thread_receive()
     print("Please note that this script isn't meant to be executed directly. Running a server echo now...")
-    client.start()
+    client.echo()
