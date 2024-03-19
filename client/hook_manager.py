@@ -74,9 +74,13 @@ class HookManager:
     def __init__(self):
         self.hooks = {}
         self.mods = {}
+        self.game_context: pe.GameContext = pe.settings.game_context
+
+        # Setup lua context
         self.lua = LuaRuntime()
         self.lua.execute(self.GLOBAL_LUA)
         self.load_global_hooks()
+
         for hook_name, hook_function in self.hooks.items():
             self.lua.globals()[hook_name] = hook_function
 
@@ -133,3 +137,5 @@ class HookManager:
 
         self.hooks['get_all_mods'] = lambda: LuaGenerator(
             (os.path.join('mods', mod) for mod in os.listdir('mods')))
+        self.hooks['get_current_screen'] = lambda: self.game_context.screen
+        self.hooks['set_screen'] = lambda screen: setattr(self.game_context, 'screen', screen)
