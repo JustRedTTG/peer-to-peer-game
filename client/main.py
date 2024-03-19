@@ -6,6 +6,7 @@ from hook_manager import HookManager
 
 pe.init()
 
+
 class GameContext(pe.GameContext):
     AREA = (500, 500)
     FPS = 60

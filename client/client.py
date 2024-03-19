@@ -4,11 +4,17 @@ import random
 import threading
 import uuid
 from typing import Tuple
+from dotenv import load_dotenv
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.getcwd(), '..'))
 
 from common.security_wrapper import SecurityWrapper
+
+try:
+    load_dotenv('../.env-client')
+except FileNotFoundError:
+    pass
 
 SERVER_HOST = os.environ.get('SERVER_HOST', '127.0.0.1')
 SERVER_PORT = int(os.environ.get('SERVER_PORT', '9024'))
