@@ -9,6 +9,7 @@ on:
       - 'server/server.py'
       - 'Dockerfile-server'
       - 'common/*'
+      - '.github/workflows/publish-server.yml'
 
 env:
   REGISTRY: ghcr.io
