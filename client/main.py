@@ -29,6 +29,12 @@ class GameContext(pe.GameContext):
             'loading_screen': self.hooks.loading_screen
         }
 
+    def handle_event(self, e: pe.pygame.event.Event):
+        if pe.event.quitCheck():
+            self.client.receiving = False
+            self.client.socket.close()
+            pe.Pquit()
+
     def loop(self):
         try:
             self.screen_map[self.screen]()

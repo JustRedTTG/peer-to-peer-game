@@ -32,26 +32,29 @@ class Client(SecurityWrapper):
     def get_port():
         return random.randint(10000, 40000)
 
-    def __init__(self, host: str = 'localhost', port: int = None):
+    def __init__(self, host: str = 'localhost', port: int = None, echo_mode=False):
         self.identifier = uuid.uuid4()
+        self.echo_mode = echo_mode
         super().__init__(host, port or self.get_port())
         print(f'Client: {self.host}:{self.port}')
 
     def echo(self):
+        if not self.echo_mode:
+            raise Exception("Echo mode is disabled")
         self.send(b'echo', self.SERVER)
 
     def _receive(self, data: bytes, addr: Tuple[str, int]):
-        if data == b'Hello from server!':
+        if self.echo_mode and data == b'Hello from server!':
             self.send(b'Hello from client!', addr)
             print("Received echo from server")
             self.receiving = False
 
     def thread_receive(self):
-        threading.Thread(target=self.receive, daemon=False).start()
+        threading.Thread(target=self.receive, daemon=True).start()
 
 
 if __name__ == '__main__':
-    client = Client()
+    client = Client(echo_mode=True)
     client.thread_receive()
     print("Please note that this script isn't meant to be executed directly. Running a server echo now...")
     client.echo()

@@ -46,7 +46,12 @@ class SecurityWrapper:
     def receive(self):
         self.receiving = True
         while self.receiving:
-            data, addr = self.socket.recvfrom(1024)
+            try:
+                data, addr = self.socket.recvfrom(1024)
+            except:
+                if not self.receiving:
+                    return
+                continue
             if addr not in self.addressbook or b'BEGIN PUBLIC KEY' in data:
                 self.addressbook[addr] = serialization.load_pem_public_key(data)
                 if addr not in self.connected_clients:
